@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Decode PDF</title>
+</head>
+<body>
+
+<h2>Dán base64 PDF vào đây</h2>
+
+<textarea id="base64Input" rows="15" cols="100" placeholder="Dán base64 ở đây..."></textarea>
+<br><br>
+
+<button onclick="downloadPDF()">Tải PDF</button>
+
+<script>
+function downloadPDF() {
+    const base64 = document.getElementById("base64Input").value.trim();
+
+    if (!base64) {
+        alert("Chưa có dữ liệu!");
+        return;
+    }
+
+    try {
+        const byteCharacters = atob(base64);
+        const byteNumbers = new Array(byteCharacters.length);
+
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: "application/pdf" });
+
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "hop-dong.pdf";
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+    } catch (e) {
+        alert("Base64 không hợp lệ!");
+        console.error(e);
+    }
+}
+</script>
+
+</body>
+</html>
