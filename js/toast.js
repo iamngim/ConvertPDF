@@ -12,6 +12,11 @@ export function createToaster(region) {
         el.textContent = message;
         region.append(el);
 
+        if (region.showPopover) {
+            if (region.matches(":popover-open")) region.hidePopover();
+            region.showPopover();
+        }
+
         setTimeout(() => {
             el.classList.add("is-leaving");
             setTimeout(() => el.remove(), LEAVE_MS);

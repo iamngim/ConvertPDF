@@ -146,37 +146,53 @@
         Dữ liệu được xử lý tại máy của bạn, không gửi đi đâu
     </p>
 
-    <section id="previewPanel" class="preview" hidden>
-        <div class="preview-header">
-            <span>Xem trước PDF</span>
-            <div class="preview-tools">
-                <button type="button" id="openTabBtn" class="btn btn-ghost btn-small">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                        <path d="M15 3h6v6"/>
-                        <path d="M10 14L21 3"/>
-                    </svg>
-                    Mở tab mới
-                </button>
-                <button type="button" id="closePreviewBtn" class="btn btn-ghost btn-icon" aria-label="Đóng xem trước">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M18 6L6 18"/>
-                        <path d="M6 6l12 12"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <div class="preview-body">
-            <iframe id="previewFrame" class="preview-frame" title="Xem trước PDF"></iframe>
-            <div id="previewLoader" class="preview-loader" hidden>
-                <span class="spinner" aria-hidden="true"></span>
-                Đang tải bản xem trước...
-            </div>
-        </div>
-    </section>
 </main>
 
-<div id="toastRegion" class="toast-region" aria-live="polite"></div>
+<dialog id="previewDialog" class="modal" aria-labelledby="previewTitle">
+    <div class="modal-header">
+        <div class="modal-title">
+            <svg class="modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/>
+                <path d="M14 3v5h5"/>
+            </svg>
+            <h3 id="previewTitle">Xem trước</h3>
+            <span id="previewName" class="modal-sub"></span>
+        </div>
+        <div class="modal-tools">
+            <button type="button" id="openTabBtn" class="btn btn-ghost btn-small" aria-label="Mở trong tab mới">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                    <path d="M15 3h6v6"/>
+                    <path d="M10 14L21 3"/>
+                </svg>
+                <span class="btn-label">Mở tab mới</span>
+            </button>
+            <button type="button" id="modalDownloadBtn" class="btn btn-primary btn-small" aria-label="Tải PDF">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <path d="M7 10l5 5 5-5"/>
+                    <path d="M12 15V3"/>
+                </svg>
+                <span class="btn-label">Tải PDF</span>
+            </button>
+            <button type="button" id="closePreviewBtn" class="btn btn-ghost btn-icon" aria-label="Đóng xem trước" autofocus>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M18 6L6 18"/>
+                    <path d="M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <div class="modal-body">
+        <iframe id="previewFrame" class="modal-frame" title="Xem trước PDF"></iframe>
+        <div id="previewLoader" class="modal-loader" hidden>
+            <span class="spinner" aria-hidden="true"></span>
+            Đang tải bản xem trước...
+        </div>
+    </div>
+</dialog>
+
+<div id="toastRegion" class="toast-region" popover="manual" aria-live="polite"></div>
 
 <script type="module" src="js/main.js"></script>
 </body>

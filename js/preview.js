@@ -1,7 +1,7 @@
 const CLOSE_MS = 200;
 const LOADER_TIMEOUT_MS = 8000;
 
-export function createPreview({ panel, frame, loader }) {
+export function createPreview({ dialog, frame, loader, nameEl }) {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let currentUrl = null;
     let closeTimer = null;
@@ -19,45 +19,57 @@ export function createPreview({ panel, frame, loader }) {
         loader.hidden = true;
     }
 
-    function finishClose() {
+    function cleanup() {
         clearTimeout(closeTimer);
         hideLoader();
-        panel.classList.remove("is-closing");
-        panel.hidden = true;
+        dialog.classList.remove("is-closing");
         frame.removeAttribute("src");
         release();
     }
 
+    function closeNow() {
+        dialog.close();
+        cleanup();
+    }
+
+    dialog.addEventListener("close", cleanup);
+    dialog.addEventListener("cancel", (e) => {
+        e.preventDefault();
+        hide();
+    });
+
+    dialog.addEventListener("click", (e) => {
+        if (e.target === dialog) hide();
+    });
+
+    function hide() {
+        if (!dialog.open || dialog.classList.contains("is-closing")) return;
+
+        if (reducedMotion.matches) {
+            closeNow();
+            return;
+        }
+        dialog.classList.add("is-closing");
+        closeTimer = setTimeout(closeNow, CLOSE_MS);
+    }
+
     return {
-        show(blob) {
+        show(blob, name = "") {
             clearTimeout(closeTimer);
-            panel.classList.remove("is-closing");
+            dialog.classList.remove("is-closing");
             release();
 
             currentUrl = window.URL.createObjectURL(blob);
+            nameEl.textContent = name;
             loader.hidden = false;
             loaderTimer = setTimeout(hideLoader, LOADER_TIMEOUT_MS);
             frame.onload = hideLoader;
             frame.src = currentUrl;
 
-            panel.hidden = false;
-            panel.scrollIntoView({ behavior: reducedMotion.matches ? "auto" : "smooth", block: "nearest" });
+            if (!dialog.open) dialog.showModal();
         },
 
-        hide() {
-            if (panel.hidden || panel.classList.contains("is-closing")) return;
-
-            if (reducedMotion.matches) {
-                finishClose();
-                return;
-            }
-            panel.classList.add("is-closing");
-            closeTimer = setTimeout(finishClose, CLOSE_MS);
-        },
-
-        isOpen() {
-            return !panel.hidden && !panel.classList.contains("is-closing");
-        },
+        hide,
 
         openInNewTab() {
             if (currentUrl) window.open(currentUrl, "_blank", "noopener");

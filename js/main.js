@@ -28,9 +28,10 @@ const source = createSource({
 });
 
 const preview = createPreview({
-    panel: $("previewPanel"),
+    dialog: $("previewDialog"),
     frame: $("previewFrame"),
     loader: $("previewLoader"),
+    nameEl: $("previewName"),
 });
 
 setupTheme($("themeToggle"));
@@ -71,8 +72,8 @@ async function getPdfBlob() {
     }
 }
 
-function downloadPDF() {
-    return withBusy(downloadBtn, async () => {
+function downloadPDF(button = downloadBtn) {
+    return withBusy(button, async () => {
         const blob = await getPdfBlob();
         if (!blob) return;
 
@@ -85,7 +86,7 @@ function downloadPDF() {
 function previewPDF() {
     return withBusy(previewBtn, async () => {
         const blob = await getPdfBlob();
-        if (blob) preview.show(blob);
+        if (blob) preview.show(blob, normalizeFilename(filenameInput.value));
     });
 }
 
@@ -95,9 +96,10 @@ function clearAll() {
     source.focus();
 }
 
-downloadBtn.addEventListener("click", downloadPDF);
+downloadBtn.addEventListener("click", () => downloadPDF());
 previewBtn.addEventListener("click", previewPDF);
 clearBtn.addEventListener("click", clearAll);
+$("modalDownloadBtn").addEventListener("click", () => downloadPDF($("modalDownloadBtn")));
 $("closePreviewBtn").addEventListener("click", () => preview.hide());
 $("openTabBtn").addEventListener("click", () => preview.openInNewTab());
 
@@ -107,8 +109,6 @@ document.addEventListener("keydown", (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
         e.preventDefault();
         previewPDF();
-    } else if (e.key === "Escape" && preview.isOpen()) {
-        preview.hide();
     }
 });
 

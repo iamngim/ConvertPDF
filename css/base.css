@@ -26,5 +26,5 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition: none !important; }
-    .preview, .toast { animation: none !important; }
+    .modal, .modal::backdrop, .toast { animation: none !important; }
 }

@@ -382,57 +382,111 @@ textarea:hover:not(:disabled) { border-color: var(--accent); }
     border-radius: 10px;
 }
 
-/* ---------- Khung xem trước ---------- */
-.preview {
-    margin-top: 24px;
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius-md);
+.modal {
+    width: min(1100px, 96vw);
+    height: min(92vh, 940px);
+    max-width: none;
+    max-height: none;
+    margin: auto;
+    padding: 0;
     overflow: hidden;
-    background: var(--field-bg);
-    animation: reveal 0.28s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    color: var(--text);
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
 }
 
-.preview.is-closing { animation: conceal 0.2s ease both; }
+.modal[open] {
+    display: flex;
+    flex-direction: column;
+    animation: modal-in 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
 
-@keyframes reveal {
-    from { opacity: 0; transform: translateY(10px) scale(0.99); }
+.modal[open].is-closing { animation: modal-out 0.2s ease both; }
+
+.modal::backdrop {
+    background: rgba(8, 12, 24, 0.62);
+    backdrop-filter: blur(6px);
+    animation: fade-in 0.25s ease both;
+}
+
+.modal.is-closing::backdrop { animation: fade-out 0.2s ease both; }
+
+/* Khóa cuộn trang nền khi modal mở. */
+body:has(.modal[open]) { overflow: hidden; }
+
+@keyframes modal-in {
+    from { opacity: 0; transform: translateY(16px) scale(0.98); }
     to { opacity: 1; transform: none; }
 }
 
-@keyframes conceal {
+@keyframes modal-out {
     from { opacity: 1; transform: none; }
-    to { opacity: 0; transform: translateY(6px) scale(0.99); }
+    to { opacity: 0; transform: translateY(10px) scale(0.98); }
 }
 
-.preview-header {
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+
+.modal-header {
+    flex: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 10px 10px 10px 16px;
-    font-size: 0.875rem;
-    font-weight: 600;
+    padding: 12px 12px 12px 20px;
     border-bottom: 1px solid var(--card-border);
     background: var(--card);
 }
 
-.preview-tools {
+.modal-title {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 10px;
+    min-width: 0;
 }
 
-.preview-body { position: relative; }
+.modal-icon { flex: none; width: 20px; height: 20px; color: var(--accent); }
 
-.preview-frame {
+.modal-title h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.modal-sub {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 0.8125rem;
+    color: var(--muted);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.modal-tools {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.modal-body {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    background: var(--field-bg);
+}
+
+.modal-frame {
     display: block;
     width: 100%;
-    height: min(70vh, 640px);
+    height: 100%;
     border: 0;
     background: #fff;
 }
 
-.preview-loader {
+.modal-loader {
     position: absolute;
     inset: 0;
     display: flex;
@@ -444,14 +498,19 @@ textarea:hover:not(:disabled) { border-color: var(--accent); }
     background: var(--field-bg);
 }
 
-.preview-loader .spinner { width: 22px; height: 22px; color: var(--accent); }
+.modal-loader .spinner { width: 22px; height: 22px; color: var(--accent); }
 
-/* ---------- Toast ---------- */
 .toast-region {
     position: fixed;
+    inset: auto;
     left: 50%;
     bottom: 24px;
     z-index: 1000;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    background: transparent;
+    border: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -499,7 +558,6 @@ textarea:hover:not(:disabled) { border-color: var(--accent); }
     to { opacity: 0; transform: translateY(8px); }
 }
 
-/* ---------- Responsive ---------- */
 @media (max-width: 520px) {
     .card { padding: 22px 18px; border-radius: 16px; }
     textarea { min-height: 220px; }
@@ -508,4 +566,14 @@ textarea:hover:not(:disabled) { border-color: var(--accent); }
     .button-group { flex-direction: column-reverse; align-items: stretch; }
     .button-group .btn { width: 100%; }
     .input-group { flex: 1; }
+
+    .modal {
+        width: 100vw;
+        height: 100dvh;
+        border: 0;
+        border-radius: 0;
+    }
+    .modal-header { padding-left: 16px; }
+    .modal-sub { display: none; }
+    .modal-tools .btn-label { display: none; }
 }
