@@ -2,51 +2,182 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
     <title>Decode PDF</title>
+    <meta name="description" content="Giải mã chuỗi base64 thành file PDF ngay trên trình duyệt, không gửi dữ liệu đi đâu.">
+    <meta name="theme-color" content="#4f46e5">
+
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="vi_VN">
+    <meta property="og:site_name" content="Decode PDF">
+    <meta property="og:title" content="Decode PDF: base64 sang PDF">
+    <meta property="og:description" content="Dán base64, xem trước và tải PDF ngay trên trình duyệt. Dữ liệu không rời khỏi máy bạn.">
+    <meta property="og:url" content="https://iamngim.github.io/ConvertPDF/">
+    <meta property="og:image" content="https://iamngim.github.io/ConvertPDF/assets/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Decode PDF: giải mã base64 thành PDF ngay trên trình duyệt">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Decode PDF: base64 sang PDF">
+    <meta name="twitter:description" content="Dán base64, xem trước và tải PDF ngay trên trình duyệt. Dữ liệu không rời khỏi máy bạn.">
+    <meta name="twitter:image" content="https://iamngim.github.io/ConvertPDF/assets/og-image.png">
+
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+    <script src="js/theme-init.js"></script>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
 </head>
 <body>
 
-<h2>Dán base64 PDF vào đây</h2>
+<main class="card">
+    <div class="brand">
+        <div class="brand-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/>
+                <path d="M14 3v5h5"/>
+                <path d="M9 14l3 3 3-3"/>
+                <path d="M12 11v6"/>
+            </svg>
+        </div>
+        <div>
+            <h2>Dán base64 PDF vào đây</h2>
+            <p class="subtitle">Giải mã chuỗi base64 thành file PDF ngay trên trình duyệt</p>
+        </div>
+        <button type="button" id="themeToggle" class="btn btn-ghost btn-icon theme-toggle" aria-label="Chuyển giao diện sáng/tối" title="Chuyển giao diện sáng/tối">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="4"/>
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+            </svg>
+        </button>
+    </div>
 
-<textarea id="base64Input" rows="15" cols="100" placeholder="Dán base64 ở đây..."></textarea>
-<br><br>
+    <div id="field" class="field">
+        <div class="field-toolbar">
+            <button type="button" id="pasteBtn" class="btn btn-secondary btn-small">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="8" y="2" width="8" height="4" rx="1"/>
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                </svg>
+                Dán từ clipboard
+            </button>
+            <button type="button" id="pickFileBtn" class="btn btn-secondary btn-small">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <path d="M17 8l-5-5-5 5"/>
+                    <path d="M12 3v12"/>
+                </svg>
+                Chọn file .txt
+            </button>
+            <span class="shortcut-hint"><kbd id="modKey">Ctrl</kbd> + <kbd>Enter</kbd> xem trước</span>
+            <input type="file" id="fileInput" accept=".txt,text/plain" hidden>
+        </div>
 
-<button onclick="downloadPDF()">Tải PDF</button>
+        <div id="fileChip" class="file-chip" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/>
+                <path d="M14 3v5h5"/>
+            </svg>
+            <span id="fileName" class="file-chip-name"></span>
+            <span id="fileSize" class="file-chip-size"></span>
+        </div>
 
-<script>
-function downloadPDF() {
-    const base64 = document.getElementById("base64Input").value.trim();
+        <textarea id="base64Input" rows="15" cols="100" placeholder="Dán base64 ở đây, hoặc kéo thả file .txt vào..." spellcheck="false" aria-describedby="inputError"></textarea>
 
-    if (!base64) {
-        alert("Chưa có dữ liệu!");
-        return;
-    }
+        <div class="drop-overlay" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <path d="M17 8l-5-5-5 5"/>
+                <path d="M12 3v12"/>
+            </svg>
+            Thả file .txt vào đây
+        </div>
 
-    try {
-        const byteCharacters = atob(base64);
-        const byteNumbers = new Array(byteCharacters.length);
+        <p id="inputError" class="field-error" role="alert" hidden></p>
+    </div>
 
-        for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
+    <div class="actions">
+        <div class="name-field">
+            <label for="filenameInput">Tên file</label>
+            <div class="input-group">
+                <input type="text" id="filenameInput" value="hop-dong" placeholder="hop-dong" maxlength="100" autocomplete="off" spellcheck="false">
+                <span class="input-suffix">.pdf</span>
+            </div>
+        </div>
 
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: "application/pdf" });
+        <div class="button-group">
+            <button type="button" id="clearBtn" class="btn btn-ghost btn-danger" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 6h18"/>
+                    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                </svg>
+                Xóa
+            </button>
+            <button type="button" id="previewBtn" class="btn btn-secondary" aria-keyshortcuts="Control+Enter Meta+Enter" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+                Xem trước
+            </button>
+            <button type="button" id="downloadBtn" class="btn btn-primary" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <path d="M7 10l5 5 5-5"/>
+                    <path d="M12 15V3"/>
+                </svg>
+                Tải PDF
+            </button>
+        </div>
+    </div>
 
-        const url = window.URL.createObjectURL(blob);
+    <p class="hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        Dữ liệu được xử lý tại máy của bạn, không gửi đi đâu
+    </p>
 
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "hop-dong.pdf";
-        a.click();
+    <section id="previewPanel" class="preview" hidden>
+        <div class="preview-header">
+            <span>Xem trước PDF</span>
+            <div class="preview-tools">
+                <button type="button" id="openTabBtn" class="btn btn-ghost btn-small">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        <path d="M15 3h6v6"/>
+                        <path d="M10 14L21 3"/>
+                    </svg>
+                    Mở tab mới
+                </button>
+                <button type="button" id="closePreviewBtn" class="btn btn-ghost btn-icon" aria-label="Đóng xem trước">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18 6L6 18"/>
+                        <path d="M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="preview-body">
+            <iframe id="previewFrame" class="preview-frame" title="Xem trước PDF"></iframe>
+            <div id="previewLoader" class="preview-loader" hidden>
+                <span class="spinner" aria-hidden="true"></span>
+                Đang tải bản xem trước...
+            </div>
+        </div>
+    </section>
+</main>
 
-        window.URL.revokeObjectURL(url);
-    } catch (e) {
-        alert("Base64 không hợp lệ!");
-        console.error(e);
-    }
-}
-</script>
+<div id="toastRegion" class="toast-region" aria-live="polite"></div>
 
+<script type="module" src="js/main.js"></script>
 </body>
 </html>

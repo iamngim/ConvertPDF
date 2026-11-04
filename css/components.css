@@ -1,0 +1,511 @@
+
+/* ---------- Card ---------- */
+.card {
+    width: 100%;
+    max-width: 760px;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: var(--shadow);
+}
+
+/* ---------- Header ---------- */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.brand-icon {
+    flex: none;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    box-shadow: 0 8px 20px var(--accent-shadow);
+}
+
+.brand-icon svg { width: 26px; height: 26px; }
+
+h2 {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.subtitle {
+    margin: 2px 0 0;
+    font-size: 0.875rem;
+    color: var(--muted);
+}
+
+.theme-toggle { margin-left: auto; }
+
+/* Hiện mặt trời khi đang tối (bấm để sáng) và ngược lại. */
+:root[data-theme="dark"] .icon-moon,
+:root[data-theme="light"] .icon-sun { display: none; }
+
+/* ---------- Vùng nhập ---------- */
+.field { position: relative; }
+
+.field-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.shortcut-hint {
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.field-toolbar .shortcut-hint { margin-left: auto; }
+
+kbd {
+    display: inline-block;
+    min-width: 1.6em;
+    padding: 1px 6px;
+    font: inherit;
+    font-size: 0.72rem;
+    text-align: center;
+    color: var(--text);
+    background: var(--field-bg);
+    border: 1px solid var(--field-border);
+    border-bottom-width: 2px;
+    border-radius: 6px;
+}
+
+textarea {
+    display: block;
+    width: 100%;
+    min-height: clamp(200px, 38vh, 300px);
+    resize: vertical;
+    padding: 16px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--field-bg);
+    border: 1px solid var(--field-border);
+    border-radius: var(--radius-md);
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+textarea::placeholder { color: var(--muted); opacity: 0.8; }
+
+textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--ring);
+    background: var(--card);
+}
+
+textarea:disabled { cursor: not-allowed; opacity: 0.7; }
+
+textarea:hover:not(:disabled) { border-color: var(--accent); }
+
+.field.has-error textarea {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 4px var(--danger-soft);
+}
+
+.field-error {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 2px 0;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--danger);
+}
+
+.field-error::before {
+    content: "!";
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 16px;
+    height: 16px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--danger);
+    border-radius: 50%;
+}
+
+/* Chip hiển thị file lớn đã nạp (không đưa vào textarea cho nhẹ). */
+.file-chip {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding: 10px 10px 10px 14px;
+    font-size: 0.875rem;
+    background: var(--field-bg);
+    border: 1px solid var(--field-border);
+    border-radius: var(--radius-sm);
+}
+
+.file-chip svg { flex: none; width: 20px; height: 20px; color: var(--accent); }
+
+.file-chip-name {
+    flex: 1;
+    min-width: 0;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.file-chip-size { color: var(--muted); font-size: 0.8125rem; }
+
+/* Lớp phủ khi kéo file vào vùng nhập. */
+.drop-overlay {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 600;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--card) 88%, transparent);
+    border: 2px dashed var(--accent);
+    border-radius: var(--radius-md);
+    pointer-events: none;
+}
+
+.drop-overlay svg { width: 22px; height: 22px; }
+
+.field.is-dragover .drop-overlay { display: flex; }
+
+/* ---------- Tên file ---------- */
+.name-field {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.name-field label {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.input-group {
+    display: flex;
+    flex: 0 1 210px;
+    min-width: 150px;
+    overflow: hidden;
+    background: var(--field-bg);
+    border: 1px solid var(--field-border);
+    border-radius: var(--radius-sm);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input-group:hover { border-color: var(--accent); }
+
+.input-group:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--ring);
+}
+
+.input-group input {
+    flex: 1;
+    min-width: 0;
+    padding: 11px 8px 11px 14px;
+    font: inherit;
+    font-size: 0.9rem;
+    color: var(--text);
+    background: transparent;
+    border: 0;
+    outline: none;
+}
+
+/* Đuôi .pdf là nhãn nằm trong ô, không phải một ô riêng ngăn bằng đường kẻ. */
+.input-suffix {
+    align-self: center;
+    margin-right: 8px;
+    padding: 3px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    border-radius: 8px;
+    user-select: none;
+    pointer-events: none;
+}
+
+/* ---------- Thanh hành động ---------- */
+.actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.button-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 14px 0 0;
+    font-size: 0.8125rem;
+    color: var(--muted);
+}
+
+.hint svg { flex: none; width: 16px; height: 16px; }
+
+/* ---------- Nút ---------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 13px 22px;
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease,
+                background 0.15s ease, border-color 0.15s ease, color 0.15s ease,
+                opacity 0.15s ease;
+}
+
+.btn svg { width: 18px; height: 18px; flex: none; }
+
+.btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px var(--ring);
+}
+
+.btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+    filter: none;
+    box-shadow: none;
+}
+
+.btn.is-loading { pointer-events: none; }
+.btn.is-loading svg { display: none; }
+
+.btn.is-loading::before,
+.spinner {
+    content: "";
+    flex: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+.btn-primary {
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    box-shadow: 0 8px 20px var(--accent-shadow);
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    filter: brightness(1.06);
+    box-shadow: 0 12px 26px var(--accent-shadow);
+}
+
+.btn-primary:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px var(--accent-shadow);
+}
+
+/* Đặt sau :hover/:active và cùng độ ưu tiên, để vòng focus không mất khi rê chuột. */
+.btn-primary:focus-visible:not(:disabled) {
+    box-shadow: 0 0 0 4px var(--ring), 0 8px 20px var(--accent-shadow);
+}
+
+.btn-secondary {
+    color: var(--text);
+    background: var(--field-bg);
+    border-color: var(--field-border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.btn-ghost {
+    padding-inline: 16px;
+    color: var(--muted);
+    background: transparent;
+}
+
+.btn-ghost:hover:not(:disabled) {
+    color: var(--text);
+    background: var(--field-bg);
+}
+
+.btn-danger:hover:not(:disabled) {
+    color: var(--danger);
+    background: var(--danger-soft);
+}
+
+.btn-small {
+    padding: 8px 12px;
+    font-size: 0.8125rem;
+    border-radius: 10px;
+}
+
+.btn.btn-small svg { width: 16px; height: 16px; }
+
+.btn-icon {
+    padding: 8px;
+    border-radius: 10px;
+}
+
+/* ---------- Khung xem trước ---------- */
+.preview {
+    margin-top: 24px;
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--field-bg);
+    animation: reveal 0.28s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.preview.is-closing { animation: conceal 0.2s ease both; }
+
+@keyframes reveal {
+    from { opacity: 0; transform: translateY(10px) scale(0.99); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes conceal {
+    from { opacity: 1; transform: none; }
+    to { opacity: 0; transform: translateY(6px) scale(0.99); }
+}
+
+.preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 10px 10px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-bottom: 1px solid var(--card-border);
+    background: var(--card);
+}
+
+.preview-tools {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.preview-body { position: relative; }
+
+.preview-frame {
+    display: block;
+    width: 100%;
+    height: min(70vh, 640px);
+    border: 0;
+    background: #fff;
+}
+
+.preview-loader {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 0.875rem;
+    color: var(--muted);
+    background: var(--field-bg);
+}
+
+.preview-loader .spinner { width: 22px; height: 22px; color: var(--accent); }
+
+/* ---------- Toast ---------- */
+.toast-region {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: min(92vw, 420px);
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--toast-text);
+    background: var(--toast-bg);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 10px 30px var(--shadow-b);
+    animation: toast-in 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.toast::before {
+    content: "";
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.toast[data-type="success"]::before { background: var(--success); }
+.toast[data-type="error"]::before { background: var(--danger); }
+
+.toast.is-leaving { animation: toast-out 0.2s ease both; }
+
+@keyframes toast-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes toast-out {
+    from { opacity: 1; transform: none; }
+    to { opacity: 0; transform: translateY(8px); }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 520px) {
+    .card { padding: 22px 18px; border-radius: 16px; }
+    textarea { min-height: 220px; }
+    .shortcut-hint { display: none; }
+    .actions { flex-direction: column; align-items: stretch; }
+    .button-group { flex-direction: column-reverse; align-items: stretch; }
+    .button-group .btn { width: 100%; }
+    .input-group { flex: 1; }
+}

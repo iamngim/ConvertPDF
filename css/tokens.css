@@ -1,0 +1,33 @@
+:root {
+    color-scheme: light dark;
+
+    --bg: light-dark(#f4f6fb, #0b1020);
+    --bg-glow-1: light-dark(rgba(99, 102, 241, 0.18), rgba(99, 102, 241, 0.22));
+    --bg-glow-2: light-dark(rgba(14, 165, 233, 0.16), rgba(14, 165, 233, 0.14));
+    --card: light-dark(#ffffff, #131a2e);
+    --card-border: light-dark(#e5e8f0, #232c45);
+    --text: light-dark(#0f172a, #e8ecf6);
+    --muted: light-dark(#64748b, #94a3b8);
+    --field-bg: light-dark(#f8fafc, #0e1427);
+    --field-border: light-dark(#d5dbe8, #2a3452);
+    --accent: light-dark(#4f46e5, #6366f1);
+    --accent-2: light-dark(#7c3aed, #8b5cf6);
+    --accent-shadow: light-dark(rgba(79, 70, 229, 0.35), rgba(99, 102, 241, 0.4));
+    --ring: light-dark(rgba(79, 70, 229, 0.22), rgba(99, 102, 241, 0.3));
+    --danger: light-dark(#dc2626, #f87171);
+    --danger-soft: light-dark(rgba(220, 38, 38, 0.1), rgba(248, 113, 113, 0.12));
+    --success: light-dark(#16a34a, #4ade80);
+    --toast-bg: light-dark(#0f172a, #e8ecf6);
+    --toast-text: light-dark(#f8fafc, #0b1020);
+
+    --shadow-a: light-dark(rgba(15, 23, 42, 0.04), rgba(0, 0, 0, 0.3));
+    --shadow-b: light-dark(rgba(15, 23, 42, 0.08), rgba(0, 0, 0, 0.45));
+    --shadow: 0 1px 2px var(--shadow-a), 0 12px 32px var(--shadow-b);
+
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 12px;
+}
+
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
